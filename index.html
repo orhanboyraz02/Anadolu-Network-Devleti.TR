@@ -14,37 +14,39 @@
         body {
             background: linear-gradient(135deg, #0a2b3e 0%, #05212e 100%);
             font-family: 'Inter', sans-serif;
-            color: #FFD966;
+            color: #E4C580; /* softer gold */
         }
-        /* Gold & Blue Theme */
-        .gold-text { color: #FFD966; }
-        .gold-border { border-color: #FFD966; }
+        /* Soft Gold Theme - less bright */
+        .gold-text { color: #E4C580; }
+        .gold-border { border-color: #E4C580; }
+        .gold-bg { background-color: rgba(228, 197, 128, 0.15); }
         .glass-card {
             background: rgba(10, 35, 50, 0.65);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 217, 102, 0.3);
+            border: 1px solid rgba(228, 197, 128, 0.35);
             border-radius: 1.5rem;
             transition: all 0.2s;
         }
         .glass-card:hover {
-            border-color: #FFD966;
-            box-shadow: 0 8px 25px rgba(255, 217, 102, 0.15);
+            border-color: #E4C580;
+            box-shadow: 0 8px 25px rgba(228, 197, 128, 0.1);
         }
         .sidebar-icon {
             transition: all 0.2s;
-            color: #FFD966;
+            color: #E4C580;
         }
         .sidebar-icon:hover {
             transform: translateX(5px);
-            text-shadow: 0 0 6px #FFD966;
+            text-shadow: 0 0 6px #E4C580;
         }
         .btn-gold {
-            background: rgba(255, 217, 102, 0.15);
-            border: 1px solid #FFD966;
+            background: rgba(228, 197, 128, 0.15);
+            border: 1px solid #E4C580;
             transition: 0.2s;
+            color: #E4C580;
         }
         .btn-gold:hover {
-            background: #FFD966;
+            background: #E4C580;
             color: #05212e;
         }
         .event-log {
@@ -52,40 +54,56 @@
             font-size: 0.7rem;
         }
         .gold-badge {
-            background: rgba(255, 217, 102, 0.2);
-            border-left: 3px solid #FFD966;
+            background: rgba(228, 197, 128, 0.2);
+            border-left: 3px solid #E4C580;
         }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #0a2b3e; }
-        ::-webkit-scrollbar-thumb { background: #FFD966; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #E4C580; border-radius: 10px; }
+        input, select, textarea {
+            background-color: #0a2b3e;
+            border: 1px solid #E4C580;
+            color: #E4C580;
+            border-radius: 8px;
+            padding: 6px 12px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #F0D88C;
+        }
+        .table-custom td, .table-custom th {
+            padding: 8px;
+            border-bottom: 1px solid rgba(228,197,128,0.3);
+        }
     </style>
 </head>
 <body>
 
-    <!-- LOGIN / ŞİFRE KORUMALI YÖNETİM PANELİ MODAL -->
+    <!-- LOGIN / EMAIL + ŞİFRE KORUMALI YÖNETİM PANELİ MODAL -->
     <div id="loginOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center">
-        <div class="bg-[#0a2b3e] border-2 border-[#FFD966] rounded-2xl p-8 w-96 shadow-2xl text-center">
-            <i class="fas fa-shield-alt text-5xl text-[#FFD966] mb-4"></i>
+        <div class="bg-[#0a2b3e] border-2 border-[#E4C580] rounded-2xl p-8 w-96 shadow-2xl text-center">
+            <i class="fas fa-shield-alt text-5xl text-[#E4C580] mb-4"></i>
             <h2 class="text-2xl font-bold gold-text">YÖNETİM PANELİ GİRİŞİ</h2>
             <p class="text-gray-300 text-sm mb-4">Anadolu Network FIRE OS · Yetkili Erişim</p>
-            <input type="password" id="passwordInput" placeholder="Şifre" class="w-full p-2 rounded bg-gray-800 border border-[#FFD966] text-white focus:outline-none mb-4">
-            <button onclick="checkPassword()" class="btn-gold w-full py-2 rounded-lg font-bold">GİRİŞ YAP</button>
-            <p class="text-xs text-gray-400 mt-4">Demo şifre: <span class="gold-text">fire2026</span></p>
+            <input type="email" id="loginEmail" placeholder="E-posta" class="w-full p-2 mb-3 bg-gray-800 border border-[#E4C580] text-white rounded">
+            <input type="password" id="loginPassword" placeholder="Şifre" class="w-full p-2 mb-4 bg-gray-800 border border-[#E4C580] text-white rounded">
+            <button onclick="checkEmailPassword()" class="btn-gold w-full py-2 rounded-lg font-bold">GİRİŞ YAP</button>
+            <p class="text-xs text-gray-400 mt-4">Demo: <span class="gold-text">admin@fireos.com / fire2026</span></p>
         </div>
     </div>
 
     <!-- ANA DASHBOARD (başlangıçta gizli) -->
     <div id="mainDashboard" class="hidden ml-0 md:ml-20 transition-all">
-        <!-- SIDEBAR (Yan Menü) -->
-        <div class="fixed left-0 top-0 h-full w-20 bg-[#05212e]/90 backdrop-blur-xl border-r border-[#FFD966]/40 z-30 flex flex-col items-center py-6 gap-6">
+        <!-- SIDEBAR (Yan Menü - Anasayfa Paneli) -->
+        <div class="fixed left-0 top-0 h-full w-20 bg-[#05212e]/90 backdrop-blur-xl border-r border-[#E4C580]/40 z-30 flex flex-col items-center py-6 gap-6">
             <div class="text-2xl font-black gold-text">FN</div>
             <nav class="flex flex-col gap-6 text-xl">
-                <i class="fas fa-tachometer-alt sidebar-icon cursor-pointer"></i>
-                <i class="fas fa-users sidebar-icon"></i>
+                <i class="fas fa-tachometer-alt sidebar-icon cursor-pointer" onclick="showMainDashboard()" title="Anasayfa"></i>
+                <i class="fas fa-users sidebar-icon cursor-pointer" onclick="showCitizensPanel()" title="Vatandaş Yönetimi"></i>
+                <i class="fas fa-boxes sidebar-icon cursor-pointer" onclick="showPackagesPanel()" title="Paket Yönetimi"></i>
                 <i class="fas fa-chart-line sidebar-icon"></i>
                 <i class="fas fa-graduation-cap sidebar-icon"></i>
-                <i class="fas fa-brain sidebar-icon"></i>
-                <i class="fas fa-database sidebar-icon"></i>
+                <i class="fas fa-cog sidebar-icon"></i>
             </nav>
             <div class="mt-auto mb-8 text-xs gold-text/60">
                 <i class="fas fa-lock"></i> ZTA
@@ -93,165 +111,35 @@
         </div>
 
         <!-- MAIN CONTENT -->
-        <div class="p-5 md:p-6 max-w-[1600px]">
-            <!-- Header KPI Bar -->
-            <div class="flex flex-wrap justify-between items-center mb-6 gap-3">
-                <div>
-                    <h1 class="text-3xl font-extrabold tracking-tight"><span class="bg-gradient-to-r from-[#FFD966] to-amber-400 bg-clip-text text-transparent">ANADOLU NETWORK FIRE OS</span> <span class="text-xs font-mono bg-[#FFD966]/20 px-2 py-0.5 rounded-md">v3.0 · Dijital Devlet İşletim Sistemi</span></h1>
-                    <p class="gold-text/70 text-sm flex gap-2 mt-1"><i class="fas fa-gem"></i> Erdemliler Devleti | Meritokrasi | Üretim Ekonomisi</p>
-                </div>
-                <div class="flex gap-2 text-xs">
-                    <div class="bg-black/40 p-2 rounded-xl border border-[#FFD966]/30"><i class="fas fa-sync-alt"></i> Gerçek Zamanlı: <span id="liveTime">--:--:--</span></div>
-                    <div class="bg-black/40 p-2 rounded-xl"><i class="fas fa-shield-alt gold-text"></i> AI Karar Motoru: Aktif</div>
-                </div>
-            </div>
-
-            <!-- ANA PANELLER (12'lik grid) -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
-                <!-- 1. Vatandaş İstihbarat Paneli + Dijital İkiz -->
-                <div class="glass-card p-5">
-                    <div class="flex justify-between"><h3 class="font-bold gold-text"><i class="fas fa-id-card"></i> Vatandaş Dijital İkiz</h3><span id="compositeScore" class="text-2xl font-black">78.4</span></div>
-                    <div class="mt-2 space-y-1 text-sm">
-                        <div>Kimlik: <span class="gold-text">FIRE-9842-X</span> | Doğrulama Seviye 3</div>
-                        <div>Davranış Skoru: <span id="behaviorScore">82</span> | Finans: <span id="financeScore">76</span></div>
-                        <div>Eğitim: <span id="eduScore">81</span> | Yönetişim: <span id="govScore">74</span></div>
-                        <div class="w-full bg-gray-700 rounded-full h-2 mt-2"><div id="compositeBar" class="bg-[#FFD966] h-2 rounded-full" style="width:78%"></div></div>
-                        <div class="text-xs gold-text/80 mt-2">🏆 Sınıflandırma: <span id="citizenRank">Elite Vatandaş</span></div>
-                    </div>
-                </div>
-                <!-- 2. Finansal Sistem Kontrol Paneli -->
-                <div class="glass-card p-5">
-                    <h3 class="font-bold gold-text"><i class="fas fa-coins"></i> Finansal Sistem Motoru</h3>
-                    <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
-                        <div>Cüzdan: <span id="walletAmt" class="gold-text">₺24,500</span></div>
-                        <div>Kredi Skoru: <span id="creditScoreNum" class="gold-text">715</span></div>
-                        <div>Yatırım Portföy: ₺86,200</div>
-                        <div>Pasif Gelir: ₺3,240/ay</div>
-                    </div>
-                    <canvas id="financeTrendChart" height="100" class="mt-2"></canvas>
-                    <div class="text-xs gold-text/80 mt-1">FIRE Model: Tasarruf → Yatırım → Özgürlük</div>
-                </div>
-                <!-- 3. FIRE Üniversitesi Eğitim Paneli -->
-                <div class="glass-card p-5">
-                    <h3 class="font-bold gold-text"><i class="fas fa-graduation-cap"></i> FIRE Üniversitesi</h3>
-                    <div class="flex justify-between text-sm"><span>Finansal Okuryazarlık</span><span>84%</span></div>
-                    <div class="w-full bg-gray-700 rounded-full h-1.5"><div class="bg-[#FFD966] h-1.5 rounded-full" style="width:84%"></div></div>
-                    <div class="flex justify-between text-sm mt-1"><span>Girişimcilik</span><span>71%</span></div>
-                    <div class="w-full bg-gray-700 rounded-full h-1.5"><div class="bg-[#FFD966] h-1.5 rounded-full" style="width:71%"></div></div>
-                    <div class="mt-2 text-xs">Aktif Öğrenen: <span id="activeLearners">12,401</span> | Sertifikalar: +234</div>
-                    <div class="gold-badge p-2 mt-2 rounded text-xs">Üretim temelli öğrenme → Liderlik zinciri aktif</div>
-                </div>
-                <!-- 4. Devlet Senkronizasyonu (e-Devlet simülasyon) -->
-                <div class="glass-card p-5">
-                    <h3 class="font-bold gold-text"><i class="fas fa-landmark"></i> e-Devlet Simülasyon Katmanı</h3>
-                    <div class="space-y-1 text-xs mt-2">
-                        <div>✔ Vergi Durumu: Mükellef, düzenli</div>
-                        <div>✔ SGK: 4A aktif, prim günü yeterli</div>
-                        <div>📚 MEB/YÖK: Lisans mezunu, teyitli</div>
-                        <div>🏥 Sağlık Profili: Düşük risk</div>
-                    </div>
-                    <div class="mt-2 text-center text-[11px] bg-[#FFD966]/10 p-1 rounded">Son senkronizasyon: 2 saniye önce | Normalize API</div>
-                </div>
-                <!-- 5. AI Yönetişim Motoru -->
-                <div class="glass-card p-5">
-                    <div class="flex justify-between"><h3 class="font-bold gold-text"><i class="fas fa-microchip"></i> AI Strateji Motoru</h3><i class="fas fa-brain"></i></div>
-                    <div id="aiRecommendation" class="bg-black/30 p-2 rounded text-xs mt-2">📊 Politik simülasyon: Eğitim yatırımı +%2 GSYH etkisi, risk düşük.</div>
-                    <div class="mt-2 text-xs">Alternatif Senaryo B: Vergi teşviği → büyüme +1.1% / enflasyon riski orta</div>
-                    <button onclick="simulateAIPolicy()" class="btn-gold text-xs px-3 py-1 rounded-full mt-2">Yeni AI Önerisi Üret</button>
-                </div>
-                <!-- 6. Ekonomik Simülasyon Motoru -->
-                <div class="glass-card p-5">
-                    <h3 class="font-bold gold-text"><i class="fas fa-chart-line"></i> Ekonomik Simülasyon (Monte Carlo)</h3>
-                    <canvas id="gdpSimChart" height="90"></canvas>
-                    <div class="flex justify-between text-xs mt-1"><span>GSYH Büyüme: <span id="gdpGrowth" class="gold-text">+2.4%</span></span><span>Sektörel Çeşitlilik: Yüksek</span></div>
-                    <div class="mt-1 text-xs">Sermaye Akışı Endeksi: <span id="capitalFlowIdx">67</span> | İşgücü Verimliliği: 103.2</div>
-                </div>
-                <!-- 7. Olay Akış Monitörü (Event Stream) -->
-                <div class="glass-card p-5 lg:col-span-1">
-                    <h3 class="font-bold gold-text"><i class="fas fa-stream"></i> Gerçek Zamanlı Olay Akışı</h3>
-                    <div id="eventLog" class="h-28 overflow-y-auto text-[11px] font-mono space-y-1 bg-black/30 p-2 rounded mt-1">
-                        <div>→ system.boot: ANADOLU FIRE OS aktif</div>
-                        <div>→ finance.transaction: yatırım emri iletildi</div>
-                        <div>→ ai.policy.generated: yeni strateji</div>
-                    </div>
-                </div>
-                <!-- 8. Sistem Sağlığı & Metrikler -->
-                <div class="glass-card p-5">
-                    <h3 class="font-bold gold-text"><i class="fas fa-heartbeat"></i> Sistem Sağlığı</h3>
-                    <div class="grid grid-cols-2 gap-1 text-xs">
-                        <div>API Latans: <span id="apiLatency">34ms</span></div><div>Mikroservis Uptime: %99.98</div>
-                        <div>Event Throughput: 1.2k/s</div><div>AI Çıkarım: 210ms</div>
-                        <div>Veritabanı Senk: ✔ Redis & Postgres</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4 PAKET (Hizmet / Üyelik Paketleri) -->
-            <div class="mt-8">
-                <h2 class="text-2xl font-bold gold-text text-center mb-4"><i class="fas fa-gem"></i> Dijital Vatandaşlık Paketleri</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-                    <div class="glass-card p-4 text-center hover:scale-105 transition">
-                        <i class="fas fa-seedling text-3xl gold-text"></i>
-                        <h3 class="font-bold text-lg mt-2">Temel Vatandaşlık</h3>
-                        <p class="text-xs">e-Devlet erişimi, temel eğitim modülleri, finansal okur-yazarlık</p>
-                        <span class="block gold-text font-bold mt-2">Ücretsiz</span>
-                    </div>
-                    <div class="glass-card p-4 text-center hover:scale-105 transition">
-                        <i class="fas fa-chalkboard-user text-3xl gold-text"></i>
-                        <h3 class="font-bold text-lg mt-2">Girişimci Paketi</h3>
-                        <p class="text-xs">FIRE University Pro, yatırım araçları, mentorluk, vergi danışmanlığı</p>
-                        <span class="block gold-text font-bold mt-2">₺249/ay</span>
-                    </div>
-                    <div class="glass-card p-4 text-center hover:scale-105 transition">
-                        <i class="fas fa-chart-line text-3xl gold-text"></i>
-                        <h3 class="font-bold text-lg mt-2">Elite Yatırımcı</h3>
-                        <p class="text-xs">Portföy yönetimi, AI stratejileri, özel risk analizi, pasif gelir modeli</p>
-                        <span class="block gold-text font-bold mt-2">₺699/ay</span>
-                    </div>
-                    <div class="glass-card p-4 text-center hover:scale-105 transition">
-                        <i class="fas fa-building text-3xl gold-text"></i>
-                        <h3 class="font-bold text-lg mt-2">Kurumsal Devlet</h3>
-                        <p class="text-xs">Kurumlar için tam API erişimi, politika simülasyonu, özel analiz</p>
-                        <span class="block gold-text font-bold mt-2">Özel fiyatlandırma</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FOOTER & İLETİŞİM + WHATSAPP ORTAKLIĞI -->
-            <footer class="mt-10 border-t border-[#FFD966]/30 pt-6 pb-4 flex flex-wrap justify-between items-center gap-4 text-sm">
-                <div class="text-xs gold-text/70">
-                    <i class="fas fa-copyright"></i> 2026 Anadolu Network FIRE OS — Dijital Devlet İşletim Sistemi | Erdemliler Devleti Modeli | Meritokrasi Anayasası
-                </div>
-                <div class="flex gap-6">
-                    <div><i class="fas fa-phone-alt gold-text"></i> <span class="text-white">0540 966 6602</span></div>
-                    <div><i class="fab fa-whatsapp text-green-400"></i> <a href="https://wa.me/905409666602" target="_blank" class="hover:gold-text">WhatsApp İş Ortaklığı</a></div>
-                    <div><i class="fas fa-envelope"></i> info@anadolu.network</div>
-                </div>
-                <div class="text-xs gold-text/50">Tüm veriler şifrelenmiştir | Zero Trust Architecture</div>
-            </footer>
+        <div id="dynamicContent" class="p-5 md:p-6 max-w-[1600px]">
+            <!-- Anasayfa içeriği (default) -->
         </div>
     </div>
 
     <script>
-        // --- ŞİFRE KONTROLÜ ---
-        function checkPassword() {
-            let pwd = document.getElementById('passwordInput').value;
-            if(pwd === "fire2026") {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('mainDashboard').classList.remove('hidden');
-                startLiveUpdates();
-            } else {
-                alert("Yanlış şifre! Demo şifre: fire2026");
-            }
-        }
+        // ---------- STATE MANAGEMENT (CRUD için) ----------
+        let citizensList = [
+            { id: 1, name: "Ahmet Yılmaz", identity: "FIRE-1001", financeScore: 78, eduScore: 82, behaviorScore: 85, govScore: 70 },
+            { id: 2, name: "Zeynep Kaya", identity: "FIRE-1002", financeScore: 92, eduScore: 88, behaviorScore: 90, govScore: 84 }
+        ];
+        let packagesList = [
+            { id: 1, name: "Temel Vatandaşlık", price: "Ücretsiz", features: "e-Devlet erişimi, temel eğitim" },
+            { id: 2, name: "Girişimci Paketi", price: "₺249/ay", features: "FIRE University Pro, yatırım araçları" },
+            { id: 3, name: "Elite Yatırımcı", price: "₺699/ay", features: "Portföy yönetimi, AI stratejileri" },
+            { id: 4, name: "Kurumsal Devlet", price: "Özel", features: "Tam API erişimi, politika simülasyonu" }
+        ];
 
-        // --- GERÇEK ZAMANLI SİMÜLASYON MOTORU ---
+        // Global charts
+        let financeChart, gdpChart;
+
+        // Dinamik veriler
         let citizenData = {
             behavior: 82, finance: 76, education: 81, governance: 74, composite: 78.4,
             wallet: 24500, creditScore: 715, gdpGrowth: 2.4, capitalFlow: 67, activeLearners: 12401
         };
         let eventHistory = ["system.boot: ANADOLU FIRE OS aktif", "finance.transaction: yatırım emri iletildi", "ai.policy.generated: yeni strateji"];
 
+        // Helper functions
         function addEvent(msg) {
             eventHistory.unshift(msg);
             if(eventHistory.length > 6) eventHistory.pop();
@@ -277,44 +165,23 @@
             document.getElementById('activeLearners').innerText = citizenData.activeLearners.toLocaleString();
             document.getElementById('apiLatency').innerText = Math.floor(20 + Math.random() * 25) + 'ms';
             // chart güncellemeleri
-            if(window.financeChart) {
+            if(financeChart) {
                 let newVal = citizenData.wallet / 1000;
-                let newArr = window.financeChart.data.datasets[0].data.slice(1);
+                let newArr = financeChart.data.datasets[0].data.slice(1);
                 newArr.push(newVal);
-                window.financeChart.data.datasets[0].data = newArr;
-                window.financeChart.update();
+                financeChart.data.datasets[0].data = newArr;
+                financeChart.update();
             }
-            if(window.gdpChart) {
+            if(gdpChart) {
                 let newGdp = 100 + (citizenData.gdpGrowth * 1.2);
-                let gdpArr = window.gdpChart.data.datasets[0].data.slice(1);
+                let gdpArr = gdpChart.data.datasets[0].data.slice(1);
                 gdpArr.push(newGdp);
-                window.gdpChart.data.datasets[0].data = gdpArr;
-                window.gdpChart.update();
+                gdpChart.data.datasets[0].data = gdpArr;
+                gdpChart.update();
             }
         }
 
-        // AI policy simülatörü
-        window.simulateAIPolicy = function() {
-            const policies = [
-                "Eğitim yatırımı +%15 → GSYH +%2.7, risk düşük. Alternatif: Vergi indirimi enflasyon baskısı yapabilir.",
-                "Kredi genişlemesi %5 → tüketim artar, sistemik risk ORTA. Önerilen: dengeli teşvik.",
-                "Teknoloji vergi muafiyeti → Ar-Ge yatırımı +%12, istihdam artışı öngörülüyor.",
-                "Erdemliler fonu: girişimcilere destek, finansal özgürlük endeksi +3 puan."
-            ];
-            let selected = policies[Math.floor(Math.random() * policies.length)];
-            document.getElementById('aiRecommendation').innerHTML = `🧠 AI Öneri: ${selected}`;
-            addEvent(`ai.policy.generated: yeni strateji -> ${selected.substring(0, 60)}`);
-            // ekonomiye etki simülasyonu
-            citizenData.gdpGrowth = (2.0 + Math.random() * 2.5).toFixed(1);
-            citizenData.capitalFlow = Math.min(95, citizenData.capitalFlow + (Math.random() * 4 - 1));
-            citizenData.wallet += Math.floor(Math.random() * 800 - 200);
-            citizenData.creditScore = Math.min(850, citizenData.creditScore + Math.floor(Math.random() * 8 - 3));
-            citizenData.activeLearners += Math.floor(Math.random() * 50);
-            updateUI();
-        };
-
         function realTimeSimulation() {
-            // Vatandaş dinamik skor değişimi
             citizenData.behavior = Math.min(100, Math.max(40, citizenData.behavior + (Math.random() * 2 - 0.8)));
             citizenData.finance = Math.min(98, Math.max(35, citizenData.finance + (Math.random() * 2 - 0.5)));
             citizenData.education = Math.min(99, citizenData.education + (Math.random() * 1.5 - 0.3));
@@ -322,10 +189,9 @@
             citizenData.wallet += Math.floor(Math.random() * 400 - 100);
             citizenData.wallet = Math.max(5000, citizenData.wallet);
             citizenData.creditScore = Math.min(850, Math.max(550, citizenData.creditScore + Math.floor(Math.random() * 6 - 2)));
-            citizenData.gdpGrowth = (citizenData.gdpGrowth * 1 + (Math.random() * 0.8 - 0.3)).toFixed(1);
+            citizenData.gdpGrowth = (parseFloat(citizenData.gdpGrowth) + (Math.random() * 0.8 - 0.3)).toFixed(1);
             citizenData.capitalFlow = Math.min(90, Math.max(45, citizenData.capitalFlow + (Math.random() * 2 - 0.6)));
             citizenData.activeLearners += Math.floor(Math.random() * 20);
-            // olay üretimi
             if(Math.random() > 0.7) {
                 const events = ["finance.transaction.executed: yeni yatırım", "education.progress.updated: modül tamamlandı", "tax.synced: vergi güncellemesi", "system.risk.detected: düşük anomali"];
                 let randEv = events[Math.floor(Math.random() * events.length)];
@@ -334,43 +200,251 @@
             updateUI();
         }
 
-        // Saat güncelleme
         function updateClock() {
             let now = new Date();
-            document.getElementById('liveTime').innerHTML = now.toLocaleTimeString('tr-TR');
+            let timeEl = document.getElementById('liveTime');
+            if(timeEl) timeEl.innerHTML = now.toLocaleTimeString('tr-TR');
         }
 
         function initCharts() {
             const ctxFinance = document.getElementById('financeTrendChart').getContext('2d');
-            window.financeChart = new Chart(ctxFinance, {
+            financeChart = new Chart(ctxFinance, {
                 type: 'line',
-                data: { labels: ['H1', 'H2', 'H3', 'H4', 'H5', 'Şimdi'], datasets: [{ label: 'Net Değer (₺K)', data: [22, 24, 23.5, 25, 26.2, citizenData.wallet/1000], borderColor: '#FFD966', fill: false }] },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#FFD966' } } } }
+                data: { labels: ['H1', 'H2', 'H3', 'H4', 'H5', 'Şimdi'], datasets: [{ label: 'Net Değer (₺K)', data: [22, 24, 23.5, 25, 26.2, citizenData.wallet/1000], borderColor: '#E4C580', fill: false }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#E4C580' } } } }
             });
             const ctxGdp = document.getElementById('gdpSimChart').getContext('2d');
-            window.gdpChart = new Chart(ctxGdp, {
+            gdpChart = new Chart(ctxGdp, {
                 type: 'bar',
-                data: { labels: ['Çeyrek1', 'Çeyrek2', 'Çeyrek3', 'Tahmin'], datasets: [{ label: 'Büyüme İndeksi', data: [102, 104, 106.5, 108.2], backgroundColor: '#FFD966' }] },
-                options: { responsive: true, plugins: { legend: { labels: { color: '#FFD966' } } } }
+                data: { labels: ['Çeyrek1', 'Çeyrek2', 'Çeyrek3', 'Tahmin'], datasets: [{ label: 'Büyüme İndeksi', data: [102, 104, 106.5, 108.2], backgroundColor: '#E4C580' }] },
+                options: { responsive: true, plugins: { legend: { labels: { color: '#E4C580' } } } }
             });
         }
 
-        function startLiveUpdates() {
+        // ----- ANA SAYFA (Dashboard) -----
+        function renderMainDashboard() {
+            const html = `
+                <div class="flex flex-wrap justify-between items-center mb-6 gap-3">
+                    <div>
+                        <h1 class="text-3xl font-extrabold tracking-tight"><span class="bg-gradient-to-r from-[#E4C580] to-amber-400 bg-clip-text text-transparent">ANADOLU NETWORK FIRE OS</span> <span class="text-xs font-mono bg-[#E4C580]/20 px-2 py-0.5 rounded-md">v3.0 · Dijital Devlet İşletim Sistemi</span></h1>
+                        <p class="gold-text/70 text-sm flex gap-2 mt-1"><i class="fas fa-gem"></i> Erdemliler Devleti | Meritokrasi | Üretim Ekonomisi</p>
+                    </div>
+                    <div class="flex gap-2 text-xs">
+                        <div class="bg-black/40 p-2 rounded-xl border border-[#E4C580]/30"><i class="fas fa-sync-alt"></i> Gerçek Zamanlı: <span id="liveTime">--:--:--</span></div>
+                        <div class="bg-black/40 p-2 rounded-xl"><i class="fas fa-shield-alt gold-text"></i> AI Karar Motoru: Aktif</div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
+                    <!-- Vatandaş Dijital İkiz -->
+                    <div class="glass-card p-5">
+                        <div class="flex justify-between"><h3 class="font-bold gold-text"><i class="fas fa-id-card"></i> Vatandaş Dijital İkiz</h3><span id="compositeScore" class="text-2xl font-black">78.4</span></div>
+                        <div class="mt-2 space-y-1 text-sm">
+                            <div>Kimlik: <span class="gold-text">FIRE-9842-X</span> | Doğrulama Seviye 3</div>
+                            <div>Davranış Skoru: <span id="behaviorScore">82</span> | Finans: <span id="financeScore">76</span></div>
+                            <div>Eğitim: <span id="eduScore">81</span> | Yönetişim: <span id="govScore">74</span></div>
+                            <div class="w-full bg-gray-700 rounded-full h-2 mt-2"><div id="compositeBar" class="bg-[#E4C580] h-2 rounded-full" style="width:78%"></div></div>
+                            <div class="text-xs gold-text/80 mt-2">🏆 Sınıflandırma: <span id="citizenRank">Elite Vatandaş</span></div>
+                        </div>
+                    </div>
+                    <!-- Finansal Sistem -->
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold gold-text"><i class="fas fa-coins"></i> Finansal Sistem Motoru</h3>
+                        <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                            <div>Cüzdan: <span id="walletAmt" class="gold-text">₺24,500</span></div>
+                            <div>Kredi Skoru: <span id="creditScoreNum" class="gold-text">715</span></div>
+                            <div>Yatırım Portföy: ₺86,200</div>
+                            <div>Pasif Gelir: ₺3,240/ay</div>
+                        </div>
+                        <canvas id="financeTrendChart" height="100" class="mt-2"></canvas>
+                        <div class="text-xs gold-text/80 mt-1">FIRE Model: Tasarruf → Yatırım → Özgürlük</div>
+                    </div>
+                    <!-- FIRE Üniversitesi -->
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold gold-text"><i class="fas fa-graduation-cap"></i> FIRE Üniversitesi</h3>
+                        <div class="flex justify-between text-sm"><span>Finansal Okuryazarlık</span><span>84%</span></div><div class="w-full bg-gray-700 rounded-full h-1.5"><div class="bg-[#E4C580] h-1.5 rounded-full" style="width:84%"></div></div>
+                        <div class="flex justify-between text-sm mt-1"><span>Girişimcilik</span><span>71%</span></div><div class="w-full bg-gray-700 rounded-full h-1.5"><div class="bg-[#E4C580] h-1.5 rounded-full" style="width:71%"></div></div>
+                        <div class="mt-2 text-xs">Aktif Öğrenen: <span id="activeLearners">12,401</span> | Sertifikalar: +234</div>
+                        <div class="gold-badge p-2 mt-2 rounded text-xs">Üretim temelli öğrenme → Liderlik zinciri aktif</div>
+                    </div>
+                    <!-- e-Devlet -->
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold gold-text"><i class="fas fa-landmark"></i> e-Devlet Simülasyon Katmanı</h3>
+                        <div class="space-y-1 text-xs mt-2">✔ Vergi Durumu: Mükellef<br>✔ SGK: 4A aktif<br>📚 MEB/YÖK: Lisans mezunu<br>🏥 Sağlık Profili: Düşük risk</div>
+                        <div class="mt-2 text-center text-[11px] bg-[#E4C580]/10 p-1 rounded">Son senkronizasyon: 2 saniye önce</div>
+                    </div>
+                    <!-- AI Motoru -->
+                    <div class="glass-card p-5">
+                        <div class="flex justify-between"><h3 class="font-bold gold-text"><i class="fas fa-microchip"></i> AI Strateji Motoru</h3><i class="fas fa-brain"></i></div>
+                        <div id="aiRecommendation" class="bg-black/30 p-2 rounded text-xs mt-2">📊 Politik simülasyon: Eğitim yatırımı +%2 GSYH etkisi, risk düşük.</div>
+                        <button onclick="simulateAIPolicy()" class="btn-gold text-xs px-3 py-1 rounded-full mt-2">Yeni AI Önerisi Üret</button>
+                    </div>
+                    <!-- Ekonomi Simülasyonu -->
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold gold-text"><i class="fas fa-chart-line"></i> Ekonomik Simülasyon (Monte Carlo)</h3>
+                        <canvas id="gdpSimChart" height="90"></canvas>
+                        <div class="flex justify-between text-xs mt-1"><span>GSYH Büyüme: <span id="gdpGrowth" class="gold-text">+2.4%</span></span></div>
+                        <div class="mt-1 text-xs">Sermaye Akışı: <span id="capitalFlowIdx">67</span> | İşgücü Verimliliği: 103.2</div>
+                    </div>
+                    <!-- Event Stream -->
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold gold-text"><i class="fas fa-stream"></i> Gerçek Zamanlı Olay Akışı</h3>
+                        <div id="eventLog" class="h-28 overflow-y-auto text-[11px] font-mono space-y-1 bg-black/30 p-2 rounded mt-1"></div>
+                    </div>
+                    <!-- Sistem Sağlığı -->
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold gold-text"><i class="fas fa-heartbeat"></i> Sistem Sağlığı</h3>
+                        <div class="grid grid-cols-2 gap-1 text-xs">
+                            <div>API Latans: <span id="apiLatency">34ms</span></div><div>Mikroservis Uptime: %99.98</div>
+                            <div>Event Throughput: 1.2k/s</div><div>AI Çıkarım: 210ms</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Paketler ve Footer -->
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold gold-text text-center mb-4"><i class="fas fa-gem"></i> Dijital Vatandaşlık Paketleri</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="packagesContainer"></div>
+                </div>
+                <footer class="mt-10 border-t border-[#E4C580]/30 pt-6 pb-4 flex flex-wrap justify-between items-center gap-4 text-sm">
+                    <div class="text-xs gold-text/70"><i class="fas fa-copyright"></i> 2026 Anadolu Network FIRE OS — Erdemliler Devleti Modeli</div>
+                    <div class="flex gap-6"><i class="fas fa-phone-alt gold-text"></i> 0540 966 6602 | <i class="fab fa-whatsapp text-green-400"></i> <a href="https://wa.me/905409666602" target="_blank" class="hover:gold-text">WhatsApp İş Ortaklığı</a> | <i class="fas fa-envelope"></i> info@anadolu.network</div>
+                </footer>
+            `;
+            document.getElementById('dynamicContent').innerHTML = html;
             initCharts();
             updateUI();
-            updateClock();
-            setInterval(realTimeSimulation, 4800);
-            setInterval(updateClock, 1000);
-            setInterval(() => {
-                if(Math.random() > 0.85) addEvent("system.metrics: CPU %24, Mem %37 | tüm servisler çalışıyor");
-            }, 15000);
-            addEvent("session.start: Yönetici girişi başarılı | Yetki seviyesi: Tam Kontrol");
+            renderPackagesOnDashboard();
+            setInterval(() => { if(document.getElementById('liveTime')) updateClock(); }, 1000);
         }
 
-        // eğer şifre doğru girilmezse overlay kalır.
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') checkPassword();
-        });
+        function renderPackagesOnDashboard() {
+            const container = document.getElementById('packagesContainer');
+            if(container) {
+                container.innerHTML = packagesList.map(pkg => `
+                    <div class="glass-card p-4 text-center hover:scale-105 transition">
+                        <i class="fas fa-box-open text-2xl gold-text"></i>
+                        <h3 class="font-bold text-lg mt-2">${pkg.name}</h3>
+                        <p class="text-xs">${pkg.features}</p>
+                        <span class="block gold-text font-bold mt-2">${pkg.price}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ----- Vatandaş Yönetim Paneli (CRUD) -----
+        function showCitizensPanel() {
+            const html = `
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold gold-text"><i class="fas fa-users"></i> Vatandaş Yönetimi</h2><button onclick="showAddCitizenModal()" class="btn-gold px-4 py-2 rounded-lg">+ Yeni Vatandaş Ekle</button></div>
+                    <div class="overflow-x-auto"><table class="w-full text-sm table-custom">
+                        <thead><tr class="gold-text border-b border-[#E4C580]/40"><th>ID</th><th>Ad Soyad</th><th>Kimlik No</th><th>Finans Skor</th><th>Eğitim Skor</th><th>İşlemler</th></tr></thead>
+                        <tbody id="citizensTableBody"></tbody>
+                    </table></div>
+                </div>
+            `;
+            document.getElementById('dynamicContent').innerHTML = html;
+            renderCitizensTable();
+        }
+
+        function renderCitizensTable() {
+            const tbody = document.getElementById('citizensTableBody');
+            if(tbody) {
+                tbody.innerHTML = citizensList.map(cit => `
+                    <tr><td>${cit.id}</td><td>${cit.name}</td><td>${cit.identity}</td><td>${cit.financeScore}</td><td>${cit.eduScore}</td>
+                    <td><button onclick="deleteCitizen(${cit.id})" class="text-red-400 hover:text-red-200"><i class="fas fa-trash"></i></button></td></tr>
+                `).join('');
+            }
+        }
+
+        window.showAddCitizenModal = function() {
+            let name = prompt("Vatandaş Ad Soyad:");
+            if(name) {
+                let newId = Date.now();
+                citizensList.push({ id: newId, name: name, identity: `FIRE-${newId}`, financeScore: 70, eduScore: 70, behaviorScore: 70, govScore: 70 });
+                renderCitizensTable();
+                addEvent(`citizen.created: ${name} sisteme eklendi`);
+            }
+        };
+        window.deleteCitizen = function(id) {
+            citizensList = citizensList.filter(c => c.id !== id);
+            renderCitizensTable();
+            addEvent(`citizen.deleted: ID ${id} silindi`);
+        };
+
+        // ----- Paket Yönetim Paneli (CRUD) -----
+        function showPackagesPanel() {
+            const html = `
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold gold-text"><i class="fas fa-boxes"></i> Paket Yönetimi</h2><button onclick="showAddPackageModal()" class="btn-gold px-4 py-2 rounded-lg">+ Yeni Paket Ekle</button></div>
+                    <div class="overflow-x-auto"><table class="w-full text-sm table-custom">
+                        <thead><tr class="gold-text"><th>ID</th><th>Paket Adı</th><th>Fiyat</th><th>Özellikler</th><th>İşlemler</th></tr></thead>
+                        <tbody id="packagesTableBody"></tbody>
+                    </table></div>
+                </div>
+            `;
+            document.getElementById('dynamicContent').innerHTML = html;
+            renderPackagesTable();
+        }
+
+        function renderPackagesTable() {
+            const tbody = document.getElementById('packagesTableBody');
+            if(tbody) {
+                tbody.innerHTML = packagesList.map(pkg => `
+                    <tr><td>${pkg.id}</td><td>${pkg.name}</td><td>${pkg.price}</td><td>${pkg.features}</td>
+                    <td><button onclick="deletePackage(${pkg.id})" class="text-red-400 hover:text-red-200"><i class="fas fa-trash"></i></button></td></tr>
+                `).join('');
+            }
+        }
+
+        window.showAddPackageModal = function() {
+            let name = prompt("Paket Adı:");
+            if(name) {
+                let price = prompt("Fiyat (örnek: ₺299/ay)");
+                let features = prompt("Özellikler (kısa açıklama)");
+                let newId = Date.now();
+                packagesList.push({ id: newId, name: name, price: price || "Belirtilmedi", features: features || "-" });
+                renderPackagesTable();
+                addEvent(`package.created: ${name} eklendi`);
+                if(document.getElementById('packagesContainer')) renderPackagesOnDashboard();
+            }
+        };
+        window.deletePackage = function(id) {
+            packagesList = packagesList.filter(p => p.id !== id);
+            renderPackagesTable();
+            addEvent(`package.deleted: ID ${id} silindi`);
+            if(document.getElementById('packagesContainer')) renderPackagesOnDashboard();
+        };
+
+        window.simulateAIPolicy = function() {
+            const policies = ["Eğitim yatırımı +%15 → GSYH +%2.7", "Kredi genişlemesi %5 → tüketim artar", "Teknoloji vergi muafiyeti → Ar-Ge +%12", "Erdemliler fonu: girişimcilere destek"];
+            let selected = policies[Math.floor(Math.random() * policies.length)];
+            let recDiv = document.getElementById('aiRecommendation');
+            if(recDiv) recDiv.innerHTML = `🧠 AI Öneri: ${selected}`;
+            addEvent(`ai.policy.generated: ${selected}`);
+            citizenData.gdpGrowth = (2.0 + Math.random() * 2.5).toFixed(1);
+            citizenData.capitalFlow = Math.min(95, citizenData.capitalFlow + (Math.random() * 4 - 1));
+            citizenData.wallet += Math.floor(Math.random() * 800 - 200);
+            updateUI();
+        };
+
+        function showMainDashboard() { renderMainDashboard(); }
+
+        // ----- GİRİŞ KONTROLÜ (Email + Şifre) -----
+        window.checkEmailPassword = function() {
+            let email = document.getElementById('loginEmail').value;
+            let pwd = document.getElementById('loginPassword').value;
+            if(email === "admin@fireos.com" && pwd === "fire2026") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                renderMainDashboard();
+                setInterval(realTimeSimulation, 4800);
+                setInterval(() => { if(Math.random() > 0.85) addEvent("system.metrics: tüm servisler çalışıyor"); }, 15000);
+                addEvent("session.start: Yönetici girişi başarılı | Yetki seviyesi: Tam Kontrol");
+            } else {
+                alert("Hatalı e-posta veya şifre! Demo: admin@fireos.com / fire2026");
+            }
+        };
+
+        document.getElementById('loginPassword')?.addEventListener('keypress', function(e) { if(e.key === 'Enter') checkEmailPassword(); });
     </script>
 </body>
 </html>
