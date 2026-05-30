@@ -3,385 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>FIRE OS | Dijital Vatandaşlık Dashboard</title>
-    <!-- TailwindCSS + Fonts + Icons + Charts -->
+    <title>ANADOLU NETWORK FIRE OS | Dijital Devlet İşletim Sistemi</title>
+    <!-- Tailwind + Fonts + Icons + Charts -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * { font-family: 'Inter', sans-serif; }
         body {
-            background: radial-gradient(circle at 10% 20%, rgba(10, 20, 35, 1) 0%, #030712 100%);
-            background-attachment: fixed;
+            background: linear-gradient(135deg, #0a2b3e 0%, #05212e 100%);
+            font-family: 'Inter', sans-serif;
+            color: #FFD966;
         }
-        /* glassmorphism cards */
+        /* Gold & Blue Theme */
+        .gold-text { color: #FFD966; }
+        .gold-border { border-color: #FFD966; }
         .glass-card {
-            background: rgba(15, 25, 40, 0.65);
+            background: rgba(10, 35, 50, 0.65);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(72, 187, 255, 0.2);
+            border: 1px solid rgba(255, 217, 102, 0.3);
             border-radius: 1.5rem;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
         .glass-card:hover {
-            border-color: rgba(0, 200, 255, 0.4);
-            box-shadow: 0 8px 20px rgba(0, 180, 255, 0.1);
-        }
-        .glow-text {
-            text-shadow: 0 0 6px rgba(0, 180, 255, 0.3);
+            border-color: #FFD966;
+            box-shadow: 0 8px 25px rgba(255, 217, 102, 0.15);
         }
         .sidebar-icon {
             transition: all 0.2s;
+            color: #FFD966;
         }
         .sidebar-icon:hover {
-            transform: translateX(4px);
-            color: #3b82f6;
+            transform: translateX(5px);
+            text-shadow: 0 0 6px #FFD966;
         }
-        ::-webkit-scrollbar {
-            width: 5px;
+        .btn-gold {
+            background: rgba(255, 217, 102, 0.15);
+            border: 1px solid #FFD966;
+            transition: 0.2s;
         }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
+        .btn-gold:hover {
+            background: #FFD966;
+            color: #05212e;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #2dd4bf;
-            border-radius: 10px;
+        .event-log {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
         }
-        .skill-node {
-            background: rgba(0, 160, 255, 0.15);
-            border-left: 3px solid #2dd4bf;
+        .gold-badge {
+            background: rgba(255, 217, 102, 0.2);
+            border-left: 3px solid #FFD966;
         }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0a2b3e; }
+        ::-webkit-scrollbar-thumb { background: #FFD966; border-radius: 10px; }
     </style>
 </head>
-<body class="text-gray-200 antialiased">
+<body>
 
-    <!-- SIDEBAR Navigation (modern fintech/gov style) -->
-    <div class="fixed left-0 top-0 h-full w-20 bg-gray-900/50 backdrop-blur-md border-r border-white/10 z-30 flex flex-col items-center py-8 gap-8">
-        <div class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">F</div>
-        <div class="flex flex-col gap-6">
-            <i class="fas fa-tachometer-alt text-xl text-cyan-400 sidebar-icon cursor-pointer"></i>
-            <i class="fas fa-chart-line text-xl text-gray-400 sidebar-icon cursor-pointer"></i>
-            <i class="fas fa-graduation-cap text-xl text-gray-400 sidebar-icon cursor-pointer"></i>
-            <i class="fas fa-landmark text-xl text-gray-400 sidebar-icon cursor-pointer"></i>
-            <i class="fas fa-vote-yea text-xl text-gray-400 sidebar-icon cursor-pointer"></i>
-            <i class="fas fa-robot text-xl text-gray-400 sidebar-icon cursor-pointer"></i>
-        </div>
-        <div class="mt-auto mb-8 text-xs text-gray-500">
-            <i class="fas fa-shield-alt"></i>
+    <!-- LOGIN / ŞİFRE KORUMALI YÖNETİM PANELİ MODAL -->
+    <div id="loginOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center">
+        <div class="bg-[#0a2b3e] border-2 border-[#FFD966] rounded-2xl p-8 w-96 shadow-2xl text-center">
+            <i class="fas fa-shield-alt text-5xl text-[#FFD966] mb-4"></i>
+            <h2 class="text-2xl font-bold gold-text">YÖNETİM PANELİ GİRİŞİ</h2>
+            <p class="text-gray-300 text-sm mb-4">Anadolu Network FIRE OS · Yetkili Erişim</p>
+            <input type="password" id="passwordInput" placeholder="Şifre" class="w-full p-2 rounded bg-gray-800 border border-[#FFD966] text-white focus:outline-none mb-4">
+            <button onclick="checkPassword()" class="btn-gold w-full py-2 rounded-lg font-bold">GİRİŞ YAP</button>
+            <p class="text-xs text-gray-400 mt-4">Demo şifre: <span class="gold-text">fire2026</span></p>
         </div>
     </div>
 
-    <!-- MAIN DASHBOARD CONTENT -->
-    <div class="ml-20 p-5 md:p-7 max-w-[1600px]">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-cyan-300 bg-clip-text text-transparent">Dijital Vatandaşlık OS</h1>
-                <p class="text-gray-400 text-sm mt-1">Gerçek zamanlı yurttaş dijital ikiz paneli · FIRE OS v1.0</p>
-            </div>
-            <div class="flex gap-3">
-                <div class="bg-black/40 rounded-full px-4 py-2 text-sm backdrop-blur-sm border border-cyan-500/30">
-                    <i class="fas fa-sync-alt mr-2 text-cyan-400"></i> Canlı senkronizasyon
-                </div>
+    <!-- ANA DASHBOARD (başlangıçta gizli) -->
+    <div id="mainDashboard" class="hidden ml-0 md:ml-20 transition-all">
+        <!-- SIDEBAR (Yan Menü) -->
+        <div class="fixed left-0 top-0 h-full w-20 bg-[#05212e]/90 backdrop-blur-xl border-r border-[#FFD966]/40 z-30 flex flex-col items-center py-6 gap-6">
+            <div class="text-2xl font-black gold-text">FN</div>
+            <nav class="flex flex-col gap-6 text-xl">
+                <i class="fas fa-tachometer-alt sidebar-icon cursor-pointer"></i>
+                <i class="fas fa-users sidebar-icon"></i>
+                <i class="fas fa-chart-line sidebar-icon"></i>
+                <i class="fas fa-graduation-cap sidebar-icon"></i>
+                <i class="fas fa-brain sidebar-icon"></i>
+                <i class="fas fa-database sidebar-icon"></i>
+            </nav>
+            <div class="mt-auto mb-8 text-xs gold-text/60">
+                <i class="fas fa-lock"></i> ZTA
             </div>
         </div>
 
-        <!-- GRID LAYOUT: 2-3 kolon, responsive -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-            
-            <!-- 1) Citizen Identity Panel + Unified Score -->
-            <div class="glass-card p-5 lg:col-span-1">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-gray-400 text-xs uppercase tracking-wider">Dijital Vatandaşlık Kimliği</p>
-                        <h2 class="text-2xl font-bold mt-1">FIRE-<span id="citizenId">4829</span>·X</h2>
-                        <div class="flex gap-3 mt-2 text-sm">
-                            <span class="bg-green-500/20 text-green-300 px-2 py-0.5 rounded-full"><i class="fas fa-check-circle text-xs"></i> Doğrulama Seviye 3</span>
-                            <span class="bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full"><i class="fas fa-link"></i> e-Devlet bağlı</span>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-gray-400 text-xs">Güven Skoru</p>
-                        <p class="text-2xl font-bold text-teal-300" id="trustScore">94.2</p>
-                    </div>
+        <!-- MAIN CONTENT -->
+        <div class="p-5 md:p-6 max-w-[1600px]">
+            <!-- Header KPI Bar -->
+            <div class="flex flex-wrap justify-between items-center mb-6 gap-3">
+                <div>
+                    <h1 class="text-3xl font-extrabold tracking-tight"><span class="bg-gradient-to-r from-[#FFD966] to-amber-400 bg-clip-text text-transparent">ANADOLU NETWORK FIRE OS</span> <span class="text-xs font-mono bg-[#FFD966]/20 px-2 py-0.5 rounded-md">v3.0 · Dijital Devlet İşletim Sistemi</span></h1>
+                    <p class="gold-text/70 text-sm flex gap-2 mt-1"><i class="fas fa-gem"></i> Erdemliler Devleti | Meritokrasi | Üretim Ekonomisi</p>
                 </div>
-                <div class="mt-4 pt-3 border-t border-white/10">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm">Birleşik Vatandaşlık Skoru (FIRE Index)</span>
-                        <span class="text-3xl font-black bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent" id="unifiedScore">84.5</span>
-                    </div>
-                    <div class="w-full bg-gray-700 rounded-full h-2 mt-2">
-                        <div class="bg-gradient-to-r from-cyan-500 to-blue-500 h-2 rounded-full" id="scoreBar" style="width: 84.5%"></div>
-                    </div>
-                    <p class="text-xs text-gray-400 mt-2" id="citizenRank">🏆 Elite Citizen · En yüksek katılım</p>
-                </div>
-                <div class="mt-3 grid grid-cols-2 gap-2 text-center text-xs">
-                    <div class="bg-white/5 p-2 rounded-xl"><i class="fas fa-chart-simple text-cyan-400"></i> Finans %40</div>
-                    <div class="bg-white/5 p-2 rounded-xl"><i class="fas fa-brain text-purple-400"></i> Eğitim %25</div>
-                    <div class="bg-white/5 p-2 rounded-xl"><i class="fas fa-user-check text-amber-400"></i> Davranış %20</div>
-                    <div class="bg-white/5 p-2 rounded-xl"><i class="fas fa-gavel text-emerald-400"></i> Yönetişim %15</div>
+                <div class="flex gap-2 text-xs">
+                    <div class="bg-black/40 p-2 rounded-xl border border-[#FFD966]/30"><i class="fas fa-sync-alt"></i> Gerçek Zamanlı: <span id="liveTime">--:--:--</span></div>
+                    <div class="bg-black/40 p-2 rounded-xl"><i class="fas fa-shield-alt gold-text"></i> AI Karar Motoru: Aktif</div>
                 </div>
             </div>
-            
-            <!-- 2) Financial Intelligence Panel (kapsamlı) -->
-            <div class="glass-card p-5 lg:col-span-2 xl:col-span-2">
-                <div class="flex justify-between items-center flex-wrap gap-2">
-                    <h3 class="font-semibold text-lg"><i class="fas fa-coins text-cyan-400 mr-2"></i>Finansal Zeka Paneli</h3>
-                    <div class="flex gap-4 text-sm">
-                        <span class="bg-black/40 px-3 py-1 rounded-full"><i class="fas fa-wallet"></i> Cüzdan: <span id="walletBalance" class="font-mono text-cyan-300">₺12,450</span></span>
-                        <span class="bg-black/40 px-3 py-1 rounded-full"><i class="fas fa-chart-line"></i> Kredi Skoru: <span id="creditScore" class="font-mono text-cyan-300">718</span>/850</span>
+
+            <!-- ANA PANELLER (12'lik grid) -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
+                <!-- 1. Vatandaş İstihbarat Paneli + Dijital İkiz -->
+                <div class="glass-card p-5">
+                    <div class="flex justify-between"><h3 class="font-bold gold-text"><i class="fas fa-id-card"></i> Vatandaş Dijital İkiz</h3><span id="compositeScore" class="text-2xl font-black">78.4</span></div>
+                    <div class="mt-2 space-y-1 text-sm">
+                        <div>Kimlik: <span class="gold-text">FIRE-9842-X</span> | Doğrulama Seviye 3</div>
+                        <div>Davranış Skoru: <span id="behaviorScore">82</span> | Finans: <span id="financeScore">76</span></div>
+                        <div>Eğitim: <span id="eduScore">81</span> | Yönetişim: <span id="govScore">74</span></div>
+                        <div class="w-full bg-gray-700 rounded-full h-2 mt-2"><div id="compositeBar" class="bg-[#FFD966] h-2 rounded-full" style="width:78%"></div></div>
+                        <div class="text-xs gold-text/80 mt-2">🏆 Sınıflandırma: <span id="citizenRank">Elite Vatandaş</span></div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <div>
-                        <canvas id="netWorthChart" height="140"></canvas>
-                        <p class="text-center text-xs text-gray-400 mt-1">Net Değer Zaman Serisi (aylar)</p>
+                <!-- 2. Finansal Sistem Kontrol Paneli -->
+                <div class="glass-card p-5">
+                    <h3 class="font-bold gold-text"><i class="fas fa-coins"></i> Finansal Sistem Motoru</h3>
+                    <div class="grid grid-cols-2 gap-2 mt-2 text-sm">
+                        <div>Cüzdan: <span id="walletAmt" class="gold-text">₺24,500</span></div>
+                        <div>Kredi Skoru: <span id="creditScoreNum" class="gold-text">715</span></div>
+                        <div>Yatırım Portföy: ₺86,200</div>
+                        <div>Pasif Gelir: ₺3,240/ay</div>
                     </div>
-                    <div>
-                        <canvas id="cashflowChart" height="140"></canvas>
-                        <p class="text-center text-xs text-gray-400 mt-1">Aylık Nakit Akışı</p>
+                    <canvas id="financeTrendChart" height="100" class="mt-2"></canvas>
+                    <div class="text-xs gold-text/80 mt-1">FIRE Model: Tasarruf → Yatırım → Özgürlük</div>
+                </div>
+                <!-- 3. FIRE Üniversitesi Eğitim Paneli -->
+                <div class="glass-card p-5">
+                    <h3 class="font-bold gold-text"><i class="fas fa-graduation-cap"></i> FIRE Üniversitesi</h3>
+                    <div class="flex justify-between text-sm"><span>Finansal Okuryazarlık</span><span>84%</span></div>
+                    <div class="w-full bg-gray-700 rounded-full h-1.5"><div class="bg-[#FFD966] h-1.5 rounded-full" style="width:84%"></div></div>
+                    <div class="flex justify-between text-sm mt-1"><span>Girişimcilik</span><span>71%</span></div>
+                    <div class="w-full bg-gray-700 rounded-full h-1.5"><div class="bg-[#FFD966] h-1.5 rounded-full" style="width:71%"></div></div>
+                    <div class="mt-2 text-xs">Aktif Öğrenen: <span id="activeLearners">12,401</span> | Sertifikalar: +234</div>
+                    <div class="gold-badge p-2 mt-2 rounded text-xs">Üretim temelli öğrenme → Liderlik zinciri aktif</div>
+                </div>
+                <!-- 4. Devlet Senkronizasyonu (e-Devlet simülasyon) -->
+                <div class="glass-card p-5">
+                    <h3 class="font-bold gold-text"><i class="fas fa-landmark"></i> e-Devlet Simülasyon Katmanı</h3>
+                    <div class="space-y-1 text-xs mt-2">
+                        <div>✔ Vergi Durumu: Mükellef, düzenli</div>
+                        <div>✔ SGK: 4A aktif, prim günü yeterli</div>
+                        <div>📚 MEB/YÖK: Lisans mezunu, teyitli</div>
+                        <div>🏥 Sağlık Profili: Düşük risk</div>
+                    </div>
+                    <div class="mt-2 text-center text-[11px] bg-[#FFD966]/10 p-1 rounded">Son senkronizasyon: 2 saniye önce | Normalize API</div>
+                </div>
+                <!-- 5. AI Yönetişim Motoru -->
+                <div class="glass-card p-5">
+                    <div class="flex justify-between"><h3 class="font-bold gold-text"><i class="fas fa-microchip"></i> AI Strateji Motoru</h3><i class="fas fa-brain"></i></div>
+                    <div id="aiRecommendation" class="bg-black/30 p-2 rounded text-xs mt-2">📊 Politik simülasyon: Eğitim yatırımı +%2 GSYH etkisi, risk düşük.</div>
+                    <div class="mt-2 text-xs">Alternatif Senaryo B: Vergi teşviği → büyüme +1.1% / enflasyon riski orta</div>
+                    <button onclick="simulateAIPolicy()" class="btn-gold text-xs px-3 py-1 rounded-full mt-2">Yeni AI Önerisi Üret</button>
+                </div>
+                <!-- 6. Ekonomik Simülasyon Motoru -->
+                <div class="glass-card p-5">
+                    <h3 class="font-bold gold-text"><i class="fas fa-chart-line"></i> Ekonomik Simülasyon (Monte Carlo)</h3>
+                    <canvas id="gdpSimChart" height="90"></canvas>
+                    <div class="flex justify-between text-xs mt-1"><span>GSYH Büyüme: <span id="gdpGrowth" class="gold-text">+2.4%</span></span><span>Sektörel Çeşitlilik: Yüksek</span></div>
+                    <div class="mt-1 text-xs">Sermaye Akışı Endeksi: <span id="capitalFlowIdx">67</span> | İşgücü Verimliliği: 103.2</div>
+                </div>
+                <!-- 7. Olay Akış Monitörü (Event Stream) -->
+                <div class="glass-card p-5 lg:col-span-1">
+                    <h3 class="font-bold gold-text"><i class="fas fa-stream"></i> Gerçek Zamanlı Olay Akışı</h3>
+                    <div id="eventLog" class="h-28 overflow-y-auto text-[11px] font-mono space-y-1 bg-black/30 p-2 rounded mt-1">
+                        <div>→ system.boot: ANADOLU FIRE OS aktif</div>
+                        <div>→ finance.transaction: yatırım emri iletildi</div>
+                        <div>→ ai.policy.generated: yeni strateji</div>
                     </div>
                 </div>
-                <div class="grid grid-cols-3 gap-3 mt-2 text-center text-sm">
-                    <div><span class="text-gray-400">Risk Seviyesi</span><br><span id="riskLevel" class="font-bold text-amber-400">Orta-Düşük</span></div>
-                    <div><span class="text-gray-400">Portföy Değeri</span><br><span id="portfolioVal" class="font-bold">₺48,200</span></div>
-                    <div><span class="text-gray-400">Gelir Simülasyonu</span><br><span id="incomeSim" class="font-bold">₺18,750/ay</span></div>
-                </div>
-            </div>
-            
-            <!-- 3) Education & Skills Panel (skill tree + progres) -->
-            <div class="glass-card p-5">
-                <h3 class="font-semibold text-lg"><i class="fas fa-graduation-cap text-purple-300 mr-2"></i>Eğitim & Yetenekler</h3>
-                <div class="mt-2">
-                    <div class="flex justify-between text-xs"><span>Tamamlanan kurslar</span><span id="completedCourses">8</span></div>
-                    <div class="w-full bg-gray-700 rounded-full h-1.5 mt-1"><div class="bg-purple-500 h-1.5 rounded-full" style="width: 65%"></div></div>
-                    <div class="mt-3">
-                        <p class="text-xs text-gray-300 mb-1"><i class="fas fa-tree"></i> Yetenek Ağacı (node-based)</p>
-                        <div class="grid grid-cols-2 gap-2 text-xs mt-1">
-                            <div class="skill-node p-2 rounded-lg"><i class="fab fa-python text-blue-400"></i> Python · İleri <span class="float-right">85%</span></div>
-                            <div class="skill-node p-2 rounded-lg"><i class="fas fa-chart-pie"></i> Veri Analizi · Uzman <span class="float-right">92%</span></div>
-                            <div class="skill-node p-2 rounded-lg"><i class="fas fa-cloud"></i> Bulut Altyapı <span class="float-right">64%</span></div>
-                            <div class="skill-node p-2 rounded-lg"><i class="fas fa-shield-alt"></i> Siber Güvenlik <span class="float-right">57%</span></div>
-                        </div>
-                    </div>
-                    <div class="mt-3 border-t border-white/10 pt-2">
-                        <div class="flex justify-between text-xs"><span>Aktif öğrenme yolu:</span><span class="text-cyan-300">Full Stack Uzmanlığı</span></div>
-                        <div class="flex justify-between text-xs mt-1"><span>Sertifikalar:</span><span class="text-cyan-300">3 adet (BTK, MEB onaylı)</span></div>
+                <!-- 8. Sistem Sağlığı & Metrikler -->
+                <div class="glass-card p-5">
+                    <h3 class="font-bold gold-text"><i class="fas fa-heartbeat"></i> Sistem Sağlığı</h3>
+                    <div class="grid grid-cols-2 gap-1 text-xs">
+                        <div>API Latans: <span id="apiLatency">34ms</span></div><div>Mikroservis Uptime: %99.98</div>
+                        <div>Event Throughput: 1.2k/s</div><div>AI Çıkarım: 210ms</div>
+                        <div>Veritabanı Senk: ✔ Redis & Postgres</div>
                     </div>
                 </div>
             </div>
-            
-            <!-- 4) Government Data Panel (e-Devlet simülasyonu) -->
-            <div class="glass-card p-5">
-                <h3 class="font-semibold text-lg"><i class="fas fa-landmark text-emerald-400 mr-2"></i>e-Devlet Veri Katmanı</h3>
-                <div class="space-y-2 mt-2 text-sm">
-                    <div class="flex justify-between border-b border-white/10 pb-1"><span>Vergi Durumu</span><span class="text-green-300">✓ Düzenli mükellef</span></div>
-                    <div class="flex justify-between border-b border-white/10 pb-1"><span>SGK / Sosyal Güvence</span><span class="text-green-300">Aktif 4A</span></div>
-                    <div class="flex justify-between border-b border-white/10 pb-1"><span>Sağlık Risk Profili</span><span id="healthRisk">Düşük risk (Yeşil kart)</span></div>
-                    <div class="flex justify-between"><span>MEB/YÖK Kayıt</span><span>Lisans - Bilgisayar Müh. | Mezun</span></div>
-                </div>
-                <div class="mt-3 text-xs bg-cyan-900/30 p-2 rounded-lg">
-                    <i class="fas fa-database"></i> Tüm veriler e-Devlet simülasyon katmanından normalleştirildi.
-                </div>
-            </div>
-            
-            <!-- 5) Governance Participation Panel -->
-            <div class="glass-card p-5">
-                <h3 class="font-semibold text-lg"><i class="fas fa-vote-yea text-amber-400 mr-2"></i>Yönetişim Katılımı</h3>
-                <div class="flex justify-between items-center mt-2">
-                    <span>Kullanılan oy sayısı</span>
-                    <span class="text-2xl font-bold" id="votesCast">12</span>
-                </div>
-                <div class="flex justify-between text-sm mt-1"><span>Aktif öneriler</span><span id="activeProposals">3</span></div>
-                <div class="mt-3"><span class="text-gray-300">Sivil Katılım Skoru:</span> <span id="civicScore" class="text-amber-300 font-bold">86/100</span></div>
-                <div class="mt-2 text-xs bg-white/5 p-2 rounded-md"><i class="fas fa-chart-simple"></i> Politika simülasyon etkisi: Dijital dönüşüm teşviklerinden +%7 fayda</div>
-            </div>
-            
-            <!-- 6) AI Recommendation Engine Panel -->
-            <div class="glass-card p-5">
-                <h3 class="font-semibold text-lg"><i class="fas fa-microchip text-pink-400 mr-2"></i>AI Öneri Motoru</h3>
-                <div class="space-y-3 mt-2">
-                    <div class="bg-black/30 p-2 rounded-lg text-sm"><i class="fas fa-book text-blue-300"></i> 📘 Önerilen kurs: "Blokzincir & e-Devlet entegrasyonu"</div>
-                    <div class="bg-black/30 p-2 rounded-lg text-sm"><i class="fas fa-chart-line text-green-300"></i> 💰 Yatırım: Düşük riskli devlet tahvili + Döviz sepeti</div>
-                    <div class="bg-black/30 p-2 rounded-lg text-sm"><i class="fas fa-exclamation-triangle text-red-300"></i> ⚠️ Risk uyarısı: Kredi kullanım oranınız yükseliyor.</div>
-                    <div class="bg-black/30 p-2 rounded-lg text-sm"><i class="fas fa-briefcase text-cyan-300"></i> 🚀 Kariyer yolu: Veri Bilimci → Fintech Uzmanı rotası</div>
+
+            <!-- 4 PAKET (Hizmet / Üyelik Paketleri) -->
+            <div class="mt-8">
+                <h2 class="text-2xl font-bold gold-text text-center mb-4"><i class="fas fa-gem"></i> Dijital Vatandaşlık Paketleri</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <div class="glass-card p-4 text-center hover:scale-105 transition">
+                        <i class="fas fa-seedling text-3xl gold-text"></i>
+                        <h3 class="font-bold text-lg mt-2">Temel Vatandaşlık</h3>
+                        <p class="text-xs">e-Devlet erişimi, temel eğitim modülleri, finansal okur-yazarlık</p>
+                        <span class="block gold-text font-bold mt-2">Ücretsiz</span>
+                    </div>
+                    <div class="glass-card p-4 text-center hover:scale-105 transition">
+                        <i class="fas fa-chalkboard-user text-3xl gold-text"></i>
+                        <h3 class="font-bold text-lg mt-2">Girişimci Paketi</h3>
+                        <p class="text-xs">FIRE University Pro, yatırım araçları, mentorluk, vergi danışmanlığı</p>
+                        <span class="block gold-text font-bold mt-2">₺249/ay</span>
+                    </div>
+                    <div class="glass-card p-4 text-center hover:scale-105 transition">
+                        <i class="fas fa-chart-line text-3xl gold-text"></i>
+                        <h3 class="font-bold text-lg mt-2">Elite Yatırımcı</h3>
+                        <p class="text-xs">Portföy yönetimi, AI stratejileri, özel risk analizi, pasif gelir modeli</p>
+                        <span class="block gold-text font-bold mt-2">₺699/ay</span>
+                    </div>
+                    <div class="glass-card p-4 text-center hover:scale-105 transition">
+                        <i class="fas fa-building text-3xl gold-text"></i>
+                        <h3 class="font-bold text-lg mt-2">Kurumsal Devlet</h3>
+                        <p class="text-xs">Kurumlar için tam API erişimi, politika simülasyonu, özel analiz</p>
+                        <span class="block gold-text font-bold mt-2">Özel fiyatlandırma</span>
+                    </div>
                 </div>
             </div>
-            
-            <!-- 7) Behavior & Risk Panel (Davranış Analitiği - scoringe dahil) -->
-            <div class="glass-card p-5 lg:col-span-1">
-                <h3 class="font-semibold text-lg"><i class="fas fa-chart-line text-indigo-400 mr-2"></i>Davranışsal Analitik</h3>
-                <div class="mt-2 space-y-3">
-                    <div><span class="text-gray-300">Dijital Uyum Puanı:</span> <span id="behaviorScore" class="font-bold text-indigo-300">88/100</span></div>
-                    <div><span class="text-gray-300">Oturum Tutarlılığı:</span> <span>Günlük aktif (%94)</span></div>
-                    <div><span class="text-gray-300">İşlem Düzenliliği:</span> <span>Yüksek / risk anomalisi yok</span></div>
-                    <div class="text-xs text-gray-400 mt-2"><i class="fas fa-chart-line"></i> Davranış ağırlığı: Finansal okuryazarlık + düzenli öğrenme</div>
+
+            <!-- FOOTER & İLETİŞİM + WHATSAPP ORTAKLIĞI -->
+            <footer class="mt-10 border-t border-[#FFD966]/30 pt-6 pb-4 flex flex-wrap justify-between items-center gap-4 text-sm">
+                <div class="text-xs gold-text/70">
+                    <i class="fas fa-copyright"></i> 2026 Anadolu Network FIRE OS — Dijital Devlet İşletim Sistemi | Erdemliler Devleti Modeli | Meritokrasi Anayasası
                 </div>
-            </div>
-        </div>
-        
-        <!-- Real-time olay akışı / footer -->
-        <div class="mt-6 glass-card p-3 text-xs flex justify-between items-center">
-            <div><i class="fas fa-broadcast-tower text-cyan-400"></i> Event Bus (simülasyon): <span id="eventLog">son olay: citizen.created → finans profil yüklendi</span></div>
-            <div class="text-gray-400"><i class="fas fa-clock"></i> Gerçek zamanlı websocket sim. · Her 6sn güncelleme</div>
+                <div class="flex gap-6">
+                    <div><i class="fas fa-phone-alt gold-text"></i> <span class="text-white">0540 966 6602</span></div>
+                    <div><i class="fab fa-whatsapp text-green-400"></i> <a href="https://wa.me/905409666602" target="_blank" class="hover:gold-text">WhatsApp İş Ortaklığı</a></div>
+                    <div><i class="fas fa-envelope"></i> info@anadolu.network</div>
+                </div>
+                <div class="text-xs gold-text/50">Tüm veriler şifrelenmiştir | Zero Trust Architecture</div>
+            </footer>
         </div>
     </div>
 
     <script>
-        // ------------------- MOCK VERİ VE GERÇEK ZAMANLI SIMÜLASYON ------------------
-        // Veri merkezi state (Citizen Digital Twin)
-        let citizenState = {
-            identity: { id: "4829", trustScore: 94.2, verification: 3 },
-            financial: { wallet: 12450, creditScore: 718, portfolio: 48200, incomeMonthly: 18750, risk: "Orta-Düşük", netWorthHistory: [42000, 43800, 45500, 47200, 49000, 51400], cashflowHistory: [5200, 6100, 5800, 7200, 6800, 7700] },
-            education: { completedCourses: 8, activePath: "Full Stack Uzmanlığı", skills: { Python: 85, "Veri Analizi": 92, "Bulut": 64, "Siber Güv": 57 }, certificates: 3 },
-            government: { taxStatus: "Düzenli", sgk: "Aktif 4A", healthRisk: "Düşük risk (Yeşil kart)", mebStatus: "Lisans Mezunu" },
-            governance: { votesCast: 12, activeProposals: 3, civicParticipation: 86 },
-            behavior: { complianceScore: 88, consistency: "Günlük aktif" },
+        // --- ŞİFRE KONTROLÜ ---
+        function checkPassword() {
+            let pwd = document.getElementById('passwordInput').value;
+            if(pwd === "fire2026") {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                startLiveUpdates();
+            } else {
+                alert("Yanlış şifre! Demo şifre: fire2026");
+            }
+        }
+
+        // --- GERÇEK ZAMANLI SİMÜLASYON MOTORU ---
+        let citizenData = {
+            behavior: 82, finance: 76, education: 81, governance: 74, composite: 78.4,
+            wallet: 24500, creditScore: 715, gdpGrowth: 2.4, capitalFlow: 67, activeLearners: 12401
+        };
+        let eventHistory = ["system.boot: ANADOLU FIRE OS aktif", "finance.transaction: yatırım emri iletildi", "ai.policy.generated: yeni strateji"];
+
+        function addEvent(msg) {
+            eventHistory.unshift(msg);
+            if(eventHistory.length > 6) eventHistory.pop();
+            const logDiv = document.getElementById('eventLog');
+            if(logDiv) logDiv.innerHTML = eventHistory.map(e => `<div>→ ${e}</div>`).join('');
+        }
+
+        function updateUI() {
+            document.getElementById('behaviorScore').innerText = citizenData.behavior;
+            document.getElementById('financeScore').innerText = citizenData.finance;
+            document.getElementById('eduScore').innerText = citizenData.education;
+            document.getElementById('govScore').innerText = citizenData.governance;
+            let comp = (citizenData.finance*0.30 + citizenData.education*0.25 + citizenData.behavior*0.25 + citizenData.governance*0.20).toFixed(1);
+            citizenData.composite = comp;
+            document.getElementById('compositeScore').innerText = comp;
+            document.getElementById('compositeBar').style.width = Math.min(100, comp) + '%';
+            let rank = comp>=85 ? "Elite Vatandaş" : (comp>=70 ? "Üretken Yurttaş" : "Gelişen Vatandaş");
+            document.getElementById('citizenRank').innerHTML = rank;
+            document.getElementById('walletAmt').innerHTML = `₺${citizenData.wallet.toLocaleString()}`;
+            document.getElementById('creditScoreNum').innerText = citizenData.creditScore;
+            document.getElementById('gdpGrowth').innerHTML = `+${citizenData.gdpGrowth}%`;
+            document.getElementById('capitalFlowIdx').innerText = citizenData.capitalFlow;
+            document.getElementById('activeLearners').innerText = citizenData.activeLearners.toLocaleString();
+            document.getElementById('apiLatency').innerText = Math.floor(20 + Math.random() * 25) + 'ms';
+            // chart güncellemeleri
+            if(window.financeChart) {
+                let newVal = citizenData.wallet / 1000;
+                let newArr = window.financeChart.data.datasets[0].data.slice(1);
+                newArr.push(newVal);
+                window.financeChart.data.datasets[0].data = newArr;
+                window.financeChart.update();
+            }
+            if(window.gdpChart) {
+                let newGdp = 100 + (citizenData.gdpGrowth * 1.2);
+                let gdpArr = window.gdpChart.data.datasets[0].data.slice(1);
+                gdpArr.push(newGdp);
+                window.gdpChart.data.datasets[0].data = gdpArr;
+                window.gdpChart.update();
+            }
+        }
+
+        // AI policy simülatörü
+        window.simulateAIPolicy = function() {
+            const policies = [
+                "Eğitim yatırımı +%15 → GSYH +%2.7, risk düşük. Alternatif: Vergi indirimi enflasyon baskısı yapabilir.",
+                "Kredi genişlemesi %5 → tüketim artar, sistemik risk ORTA. Önerilen: dengeli teşvik.",
+                "Teknoloji vergi muafiyeti → Ar-Ge yatırımı +%12, istihdam artışı öngörülüyor.",
+                "Erdemliler fonu: girişimcilere destek, finansal özgürlük endeksi +3 puan."
+            ];
+            let selected = policies[Math.floor(Math.random() * policies.length)];
+            document.getElementById('aiRecommendation').innerHTML = `🧠 AI Öneri: ${selected}`;
+            addEvent(`ai.policy.generated: yeni strateji -> ${selected.substring(0, 60)}`);
+            // ekonomiye etki simülasyonu
+            citizenData.gdpGrowth = (2.0 + Math.random() * 2.5).toFixed(1);
+            citizenData.capitalFlow = Math.min(95, citizenData.capitalFlow + (Math.random() * 4 - 1));
+            citizenData.wallet += Math.floor(Math.random() * 800 - 200);
+            citizenData.creditScore = Math.min(850, citizenData.creditScore + Math.floor(Math.random() * 8 - 3));
+            citizenData.activeLearners += Math.floor(Math.random() * 50);
+            updateUI();
         };
 
-        // scoring alt bileşenleri dinamik
-        let financeScore = 85;      // %40 ağırlık
-        let educationScore = 82;    // %25
-        let behaviorDynamic = 88;    // %20
-        let governanceScore = 86;    // %15
-        
-        function computeUnifiedScore() {
-            let total = (financeScore * 0.40) + (educationScore * 0.25) + (behaviorDynamic * 0.20) + (governanceScore * 0.15);
-            return Math.min(100, Math.max(0, Math.round(total * 10) / 10));
+        function realTimeSimulation() {
+            // Vatandaş dinamik skor değişimi
+            citizenData.behavior = Math.min(100, Math.max(40, citizenData.behavior + (Math.random() * 2 - 0.8)));
+            citizenData.finance = Math.min(98, Math.max(35, citizenData.finance + (Math.random() * 2 - 0.5)));
+            citizenData.education = Math.min(99, citizenData.education + (Math.random() * 1.5 - 0.3));
+            citizenData.governance = Math.min(96, citizenData.governance + (Math.random() * 1.2 - 0.4));
+            citizenData.wallet += Math.floor(Math.random() * 400 - 100);
+            citizenData.wallet = Math.max(5000, citizenData.wallet);
+            citizenData.creditScore = Math.min(850, Math.max(550, citizenData.creditScore + Math.floor(Math.random() * 6 - 2)));
+            citizenData.gdpGrowth = (citizenData.gdpGrowth * 1 + (Math.random() * 0.8 - 0.3)).toFixed(1);
+            citizenData.capitalFlow = Math.min(90, Math.max(45, citizenData.capitalFlow + (Math.random() * 2 - 0.6)));
+            citizenData.activeLearners += Math.floor(Math.random() * 20);
+            // olay üretimi
+            if(Math.random() > 0.7) {
+                const events = ["finance.transaction.executed: yeni yatırım", "education.progress.updated: modül tamamlandı", "tax.synced: vergi güncellemesi", "system.risk.detected: düşük anomali"];
+                let randEv = events[Math.floor(Math.random() * events.length)];
+                addEvent(randEv);
+            }
+            updateUI();
         }
-        
-        function updateAllUI() {
-            // Identity & Score
-            document.getElementById('trustScore').innerText = citizenState.identity.trustScore.toFixed(1);
-            let unified = computeUnifiedScore();
-            document.getElementById('unifiedScore').innerText = unified;
-            document.getElementById('scoreBar').style.width = `${unified}%`;
-            let rankText = unified >= 85 ? "🏆 Elite Citizen" : (unified >= 70 ? "⭐ Yüksek Seviye Vatandaş" : (unified >= 50 ? "📈 Orta Seviye" : "📉 Gelişim Alanı"));
-            document.getElementById('citizenRank').innerHTML = rankText + (unified>=85 ? " · En yüksek katılım" : "");
-            // Financial
-            document.getElementById('walletBalance').innerHTML = `₺${citizenState.financial.wallet.toLocaleString()}`;
-            document.getElementById('creditScore').innerText = citizenState.financial.creditScore;
-            document.getElementById('riskLevel').innerText = citizenState.financial.risk;
-            document.getElementById('portfolioVal').innerHTML = `₺${citizenState.financial.portfolio.toLocaleString()}`;
-            document.getElementById('incomeSim').innerHTML = `₺${citizenState.financial.incomeMonthly.toLocaleString()}/ay`;
-            // Education
-            document.getElementById('completedCourses').innerText = citizenState.education.completedCourses;
-            // Government
-            document.getElementById('healthRisk').innerText = citizenState.government.healthRisk;
-            // Governance
-            document.getElementById('votesCast').innerText = citizenState.governance.votesCast;
-            document.getElementById('activeProposals').innerText = citizenState.governance.activeProposals;
-            document.getElementById('civicScore').innerText = citizenState.governance.civicParticipation;
-            // Behavior
-            document.getElementById('behaviorScore').innerText = behaviorDynamic;
-            
-            // Grafik Güncellemeleri
-            updateCharts();
+
+        // Saat güncelleme
+        function updateClock() {
+            let now = new Date();
+            document.getElementById('liveTime').innerHTML = now.toLocaleTimeString('tr-TR');
         }
-        
-        // ---------- CHART.JS kurulumu ----------
-        let netWorthChart, cashflowChart;
+
         function initCharts() {
-            const ctxLine = document.getElementById('netWorthChart').getContext('2d');
-            const ctxBar = document.getElementById('cashflowChart').getContext('2d');
-            netWorthChart = new Chart(ctxLine, {
+            const ctxFinance = document.getElementById('financeTrendChart').getContext('2d');
+            window.financeChart = new Chart(ctxFinance, {
                 type: 'line',
-                data: {
-                    labels: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz'],
-                    datasets: [{ label: 'Net Değer (₺)', data: citizenState.financial.netWorthHistory, borderColor: '#2dd4bf', backgroundColor: 'rgba(45,212,191,0.05)', tension: 0.3, fill: true, pointBackgroundColor: '#22d3ee' }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
+                data: { labels: ['H1', 'H2', 'H3', 'H4', 'H5', 'Şimdi'], datasets: [{ label: 'Net Değer (₺K)', data: [22, 24, 23.5, 25, 26.2, citizenData.wallet/1000], borderColor: '#FFD966', fill: false }] },
+                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#FFD966' } } } }
             });
-            cashflowChart = new Chart(ctxBar, {
+            const ctxGdp = document.getElementById('gdpSimChart').getContext('2d');
+            window.gdpChart = new Chart(ctxGdp, {
                 type: 'bar',
-                data: {
-                    labels: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz'],
-                    datasets: [{ label: 'Nakit Akışı (₺)', data: citizenState.financial.cashflowHistory, backgroundColor: '#38bdf8', borderRadius: 6 }]
-                },
-                options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
+                data: { labels: ['Çeyrek1', 'Çeyrek2', 'Çeyrek3', 'Tahmin'], datasets: [{ label: 'Büyüme İndeksi', data: [102, 104, 106.5, 108.2], backgroundColor: '#FFD966' }] },
+                options: { responsive: true, plugins: { legend: { labels: { color: '#FFD966' } } } }
             });
         }
-        function updateCharts() {
-            if (netWorthChart) {
-                netWorthChart.data.datasets[0].data = citizenState.financial.netWorthHistory;
-                netWorthChart.update();
-            }
-            if (cashflowChart) {
-                cashflowChart.data.datasets[0].data = citizenState.financial.cashflowHistory;
-                cashflowChart.update();
-            }
-        }
-        
-        // Rastgele simülasyon güncellemesi (gerçek zamanlı WebSocket simülasyonu)
-        let eventIndex = 0;
-        const eventsList = ['learning.completed → Yeni sertifika kazanıldı', 'investment.executed → portföy güncellendi', 'tax.updated → Vergi bildirimi onaylandı', 'vote.cast → Yerel yönetim önerisine oy verildi', 'citizen.score.updated → FIRE skoru yeniden hesaplandı', 'behavior.analyzed → Risk profili hafif iyileşti'];
-        
-        function randomFloat(min, max) { return +(Math.random() * (max - min) + min).toFixed(1); }
-        
-        function simulateRealTimeUpdate() {
-            // Finansal verilerde değişim
-            let oldWallet = citizenState.financial.wallet;
-            let delta = Math.floor(Math.random() * 800 - 200);
-            citizenState.financial.wallet = Math.max(3000, oldWallet + delta);
-            citizenState.financial.creditScore = Math.min(850, Math.max(550, citizenState.financial.creditScore + Math.floor(Math.random() * 7 - 2)));
-            citizenState.financial.portfolio = Math.max(10000, citizenState.financial.portfolio + Math.floor(Math.random() * 1500 - 500));
-            citizenState.financial.incomeMonthly = Math.max(10000, citizenState.financial.incomeMonthly + Math.floor(Math.random() * 600 - 200));
-            let riskMap = ["Düşük", "Orta-Düşük", "Orta", "Orta-Yüksek"];
-            if (Math.random() > 0.7) citizenState.financial.risk = riskMap[Math.floor(Math.random() * riskMap.length)];
-            
-            // Eğitim ilerlemesi
-            if (Math.random() > 0.65) {
-                citizenState.education.completedCourses = Math.min(25, citizenState.education.completedCourses + 1);
-            }
-            // Yönetişim aktivitesi
-            if (Math.random() > 0.8) {
-                citizenState.governance.votesCast += 1;
-                citizenState.governance.civicParticipation = Math.min(100, citizenState.governance.civicParticipation + Math.floor(Math.random() * 3));
-                citizenState.governance.activeProposals = Math.max(1, citizenState.governance.activeProposals + (Math.random() > 0.7 ? 1 : -1));
-            }
-            // Davranış skoru (zamanla değişken)
-            behaviorDynamic = Math.min(100, Math.max(40, behaviorDynamic + (Math.random() > 0.6 ? Math.floor(Math.random() * 3 - 1) : 0)));
-            // e-Devlet simülasyonu: sağlık risk profili dinamik mesaj
-            const healthMessages = ["Düşük risk (Yeşil kart)", "Normal risk profil", "Periyodik kontrol öneriliyor", "Sağlık taraması güncel"];
-            if (Math.random() > 0.85) citizenState.government.healthRisk = healthMessages[Math.floor(Math.random() * healthMessages.length)];
-            
-            // skor bileşenleri güncelle (finans skoru wallet, credit bazlı)
-            financeScore = Math.min(98, Math.max(40, Math.floor((citizenState.financial.creditScore / 850) * 65 + (citizenState.financial.wallet / 70000) * 30)));
-            educationScore = Math.min(96, 50 + citizenState.education.completedCourses * 2.5);
-            governanceScore = citizenState.governance.civicParticipation;
-            
-            // net worth history ve cashflow güncelle (kaydırma efekti)
-            let newNetWorth = citizenState.financial.portfolio + citizenState.financial.wallet;
-            citizenState.financial.netWorthHistory.push(newNetWorth);
-            if (citizenState.financial.netWorthHistory.length > 6) citizenState.financial.netWorthHistory.shift();
-            let newCashflow = Math.floor(Math.random() * 4000 + 4500);
-            citizenState.financial.cashflowHistory.push(newCashflow);
-            if (citizenState.financial.cashflowHistory.length > 6) citizenState.financial.cashflowHistory.shift();
-            
-            // trust score küçük oynama
-            citizenState.identity.trustScore = Math.min(100, Math.max(70, citizenState.identity.trustScore + (Math.random() > 0.7 ? (Math.random() * 1 - 0.5) : 0)));
-            
-            // event log güncelle
-            eventIndex = (eventIndex + 1) % eventsList.length;
-            let randomEvent = eventsList[Math.floor(Math.random() * eventsList.length)];
-            document.getElementById('eventLog').innerHTML = `son olay: ${randomEvent}  [${new Date().toLocaleTimeString()}]`;
-            
-            updateAllUI();
-        }
-        
-        // İlk başlangıç ve interval
-        window.addEventListener('DOMContentLoaded', () => {
+
+        function startLiveUpdates() {
             initCharts();
-            updateAllUI();
-            setInterval(simulateRealTimeUpdate, 6200); // her 6.2 saniyede canlı hissi
-            // ayrıca başlangıç event mesajı
-            setTimeout(() => {
-                document.getElementById('eventLog').innerHTML = 'son olay: system.ready → Citizen Twin başlatıldı • WebSocket bağlantısı aktif';
-            }, 500);
+            updateUI();
+            updateClock();
+            setInterval(realTimeSimulation, 4800);
+            setInterval(updateClock, 1000);
+            setInterval(() => {
+                if(Math.random() > 0.85) addEvent("system.metrics: CPU %24, Mem %37 | tüm servisler çalışıyor");
+            }, 15000);
+            addEvent("session.start: Yönetici girişi başarılı | Yetki seviyesi: Tam Kontrol");
+        }
+
+        // eğer şifre doğru girilmezse overlay kalır.
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') checkPassword();
         });
-        
-        // ek olarak cüzdan / grafik uyumu için ek mock: skill tree node görsel metin güncellemesi yapıldı.
-        // basit bir şekilde finans grafiklerine ek dokunma
     </script>
 </body>
 </html>
